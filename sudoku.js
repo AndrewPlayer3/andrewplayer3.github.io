@@ -3,80 +3,6 @@
 //  https://www.youtube.com/watch?v=G_UYXzGuqvM
 //  https://sudoku.game/
 
-/*
-let board = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0]
-];
-*/
-
-function generateCompleteBoard() {
-    let board = [];
-    let starter = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    let row = shuffle(starter)
-    board.push(row);
-    for(i = 1; i < 9; i++) {
-        generator:
-        while(true) {
-            let new_row = shuffle(starter);
-            for(j = 0; j < i; j++) {
-                for(k = 0; k < 9; k++) {
-                    if(new_row[k] == board[j][k]) {
-                        continue generator;
-                    }
-                }
-            }
-            board.push(new_row);
-            break;
-        }
-    }
-    return board;
-}
-
-function pruneBoard() {
-    
-}
-
-//let board = generateCompleteBoard();
-
-let board = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0]
-];
-
-function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
-
-    // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-
-        // Pick a remaining element...
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-
-        // And swap it with the current element.
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
-
-    return array;
-}
-
 function possible(row, col, n) {
     for(i = 0; i < 9; i++) {
         if(board[row][i] == n) {
@@ -103,11 +29,9 @@ function possible(row, col, n) {
 
 function solver() {
     for(i = 0; i < 9; i++) {
-        console.log(board);
         for(j = 0; j < 9; j++) {
             if(board[i][j] == 0) {
                 for(k = 1; k < 10; k++) {
-                    console.log(i, ", ", j, ", ", k);
                     if(possible(i, j, k)) {
                         board[i][j] = k;
                         solver();
@@ -118,9 +42,80 @@ function solver() {
             }
         }
     }
-    console.log(board);
 }
 
-function difficulty() {
+function hasUniqueSolution(arr) {
 
 }
+
+function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+}
+
+function generateCompleteBoard() {
+    let board = [];
+    let starter = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    let row = shuffle(starter)
+    board.push(row);
+    for(i = 1; i < 9; i++) {
+        generator:
+        while(true) {
+            let new_row = shuffle(starter);
+            for(j = 0; j < i; j++) {
+                for(k = 0; k < 9; k++) {
+                    if(new_row[k] == board[j][k]) {
+                        continue generator;
+                    }
+                }
+            }
+            board.push(new_row);
+            break;
+        }
+    }
+    return board;
+}
+
+function pruneBoard(arr) {
+    let cells = []
+    for(i = 0; i < 81; i++) cells.push(i);
+    cells = shuffle(cells);
+    for(i = 0; i < 81; i++) {
+        let row = floor(cells[i]/9);
+        let col = cells[i] % 9;
+        let temp = arr[row][col];
+        arr[row][col] = 0;
+        if(!hasUniqueSolution(arr)) {
+            arr[row][col] = temp;
+        }
+    }
+    return arr
+}
+
+//let board = generateCompleteBoard();
+
+let board = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0]
+];
