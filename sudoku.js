@@ -3,20 +3,78 @@
 //  https://www.youtube.com/watch?v=G_UYXzGuqvM
 //  https://sudoku.game/
 
+/*
 let board = [
-    [4, 2, 3, 0, 0, 0, 0, 0, 9],
-    [0, 0, 5, 4, 0, 0, 0, 0, 0],
-    [8, 0, 0, 0, 0, 9, 0, 4, 0],
-    [0, 0, 7, 1, 6, 5, 0, 0, 0],
-    [9, 0, 0, 7, 3, 0, 5, 1, 0],
-    [0, 1, 0, 0, 0, 2, 6, 7, 0],
-    [0, 5, 8, 0, 9, 1, 4, 2, 7],
-    [0, 4, 2, 0, 0, 8, 0, 0, 0],
-    [0, 7, 9, 0, 0, 3, 0, 0, 1]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0]
+];
+*/
+
+function generateCompleteBoard() {
+    let board = [];
+    let starter = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    let row = shuffle(starter)
+    board.push(row);
+    for(i = 1; i < 9; i++) {
+        generator:
+        while(true) {
+            let new_row = shuffle(starter);
+            for(j = 0; j < i; j++) {
+                for(k = 0; k < 9; k++) {
+                    if(new_row[k] == board[j][k]) {
+                        continue generator;
+                    }
+                }
+            }
+            board.push(new_row);
+            break;
+        }
+    }
+    return board;
+}
+
+function pruneBoard() {
+    
+}
+
+//let board = generateCompleteBoard();
+
+let board = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 
-function generator() {
+function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
 
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+
+    return array;
 }
 
 function possible(row, col, n) {
