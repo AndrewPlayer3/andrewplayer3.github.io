@@ -3,23 +3,22 @@
 //  https://www.youtube.com/watch?v=G_UYXzGuqvM
 //  https://sudoku.game/
 
-function possible(row, col, n) {
+function possible(board, row, col, n) {
     for(i = 0; i < 9; i++) {
-        if(board[row][i] == n) {
+        if(board[col][i] == n) {
             return false;
         }
     }
     for(i = 0; i < 9; i++) {
-        if(board[i][col] == n) {
+        if(board[i][row] == n) {
             return false;
         }
     }
     y0 = (row/3)*3;
     x0 = (col/3)*3;
-    console.log(y0, ", ", x0);
     for(i = 0; i < 3; i++) {
         for(j = 0; j < 3; j++) {
-            if(board[y0+i][x0+j] == n) {
+            if(board[col+y0][row+x0] == n) {
                 return false;
             }
         }
@@ -27,12 +26,29 @@ function possible(row, col, n) {
     return true;
 } 
 
-function solver() {
+function solve(board, row, col, solutions) {
+    if(row == 9) {
+        row = 0;
+        if(++cols == 9) return ++solutions;
+    }
+    if(board[row][col] != 0) {
+        return solve(board, row+1, col, solutions);
+    }
+    for(k = 1; k <= 9 && solutions < 2; ++k) {
+        if(possible(board, row, col, k)) {
+            board[row][col] = k;
+            solutions = solve(board, row+1, col, solutions)
+            board[row][col] = 0;
+        }
+    }
+}
+
+function solver(board) {
     for(i = 0; i < 9; i++) {
         for(j = 0; j < 9; j++) {
             if(board[i][j] == 0) {
                 for(k = 1; k < 10; k++) {
-                    if(possible(i, j, k)) {
+                    if(possible(board, i, j, k)) {
                         board[i][j] = k;
                         solver();
                         board[i][j] = 0;
@@ -42,6 +58,7 @@ function solver() {
             }
         }
     }
+    print(board)
 }
 
 function hasUniqueSolution(arr) {
