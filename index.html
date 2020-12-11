@@ -1,0 +1,210 @@
+<HTML>
+    <head>
+        <link rel="stylesheet" href="https://fonts.google.com/specimen/Fira+Code?query=Fira+Code">
+        <link rel= "stylesheet" type= "text/css" href= "style.css">
+        <script src="sudoku.js"></script>
+        <style>
+            table {
+                border-collapse: collapse;
+                padding: 0px
+            }
+            td {
+                height:30px;
+                width:30px;
+                border:1px solid;
+                font-size:70px;
+                text-align:center;
+            }
+            td:first-child {
+                border-left:solid;
+            }
+            td:nth-child(3n) {
+                border-right:solid;
+            }
+            tr:first-child {
+                border-top:solid;
+            }
+            tr:nth-child(3n) td {
+                border-bottom:solid;
+            }
+            .numberSelector {
+                background-color:blue;
+                color:white;
+                font-family:Arial,Sans-Serif;
+            }
+            .selectedNumber {
+                background-color:blue;
+                color:white;
+            }
+        </style>
+        
+        <meta name="description" content="Generated Sudoku">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="http://zeptojs.com/zepto.min.js"></script>
+        <title>Sudoku Generator</title>
+    </head>
+    <body>
+        <div class="menubar" id="menuBar">
+            <a href="#home" class="active">Sudoku</a>
+            <a href="manual.pdf"  target="_blank">Manual</a>
+        </div>
+        <h1 align="center">L.P.H Sudoku</h1>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.1.9/lib/p5.js"></script>
+    <div align='center'> 
+        <h3>Time: 
+            <label id="minutes">00</label>:<label id="seconds">00</label>
+        </h3>
+        <button type="button" onclick="createSudokuTable()"" size="50px">New Game</button>
+        <button type="button" onclick="solve()"" size="50px">Solve</button>
+        <br>
+        <table width="90%" padding-top="10px" padding-bottom="10px">
+            <tr>
+                <td class="selector">1</td>
+                <td class="selector">2</td>
+                <td class="selector">3</td>
+                <td class="selector">4</td>
+                <td class="selector">5</td>
+                <td class="selector">6</td>
+                <td class="selector">7</td>
+                <td class="selector">8</td>
+                <td class="selector">9</td>
+            </tr>
+        </table>
+        <table id="sudokuTable" width="90%" height="90%">
+        </table>
+        <script>
+        var is_solved = false;
+        var is_reset = false;
+        var minutesLabel = document.getElementById("minutes");
+        var secondsLabel = document.getElementById("seconds");
+        var totalSeconds = 0;
+        var inter = setInterval(setTime, 1000);
+        function setTime() {
+            ++totalSeconds;
+            secondsLabel.innerHTML = pad(totalSeconds % 60);
+            minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+        }
+        function pad(val) {
+            var valString = val + "";
+            if (valString.length < 2) {
+                return "0" + valString;
+            } else {
+                return valString;
+            }
+        }
+        function reset() {
+            empty_grid = [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+            solved = [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+            is_solved = false;
+            is_reset = true;
+            clearInterval(inter)
+            inter = setInterval(setTime, 1000);
+            totalSeconds = 0;
+        }
+        function solve() {
+            var htmlText = '';
+            for (var row = 1; row <= 9; row++) {
+                htmlText += '<tr>';
+                for (var column = 1; column <= 9; column++) {
+                    var cell = solved[row-1][column-1];
+                    if(cell === 0) {
+                        htmlText += '<td class="sudokuCell" id="cell_' + row + '_' + column + '">&nbsp;</td>';
+                    } else {
+                        htmlText += '<td class="sudokuCell" id="cell_' + row + '_' + column + '">' + cell + '</td>';
+                    }
+                }
+                htmlText += '</tr>';
+            }
+            $('#sudokuTable').html(htmlText);
+        }
+        function createSudokuTable() {
+            reset();
+            fillBoard(empty_grid);
+            pruneBoard(empty_grid);
+            var htmlText = '';
+            for (var row = 1; row <= 9; row++) {
+                htmlText += '<tr>';
+                for (var column = 1; column <= 9; column++) {
+                    var cell = empty_grid[row-1][column-1];
+                    if(cell === 0) {
+                        htmlText += '<td class="sudokuCell" id="cell_' + row + '_' + column + '">&nbsp;</td>';
+                    } else {
+                        htmlText += '<td class="sudokuCell" style="background-color:Cyan;" id="cell_' + row + '_' + column + '">' + cell + '</td>';
+                    }
+                }
+                htmlText += '</tr>';
+            }
+            $('#sudokuTable').html(htmlText);
+        }
+        var inputNumber = 1;
+        function clicked() {
+            cellId = this.id;
+            row = cellId[5] - 1;
+            col = cellId[7] - 1;
+            $('#' + cellId).text(inputNumber);
+            num = parseInt(inputNumber)
+            empty_grid[row][col] = num;
+            redder();
+            if(checkIfSolved(empty_grid)) {
+                is_solved = true;
+            }
+        }
+        function redder() {
+            for(var i = 0; i < 81; i++) {
+                var row = Math.floor(i / 9);
+                var col = i % 9;
+                cellId = "cell_"+(row+1)+"_"+(col+1);
+                temp = empty_grid.slice(row)[0][col];
+                empty_grid[row][col] = 0;
+                if(temp != 0) {
+                    if(!possible(empty_grid, row, col, temp)) {
+                        $('#' + cellId).css('color', 'red');
+                    } else {
+                        $('#' + cellId).css('color', 'black');
+                    }
+                }
+                empty_grid[row][col] = temp;
+            }
+        }
+        function selectNumber() {
+            inputNumber = this.innerText;
+            $('.selector').removeClass('selectedNumber');
+            $(this).addClass('selectedNumber');
+        }
+
+        $('#sudokuTable').on('click','.sudokuCell', clicked);
+        $('.selector').on('click', selectNumber);
+        </script>
+    </div>
+            <div align="bottom">
+            <h3>About L.H.P Sudoku</h3>
+            <p>This game was created by Robert Lawton, Andrew Player, and Gannon Higgins. Our game is a variation 
+                on the classic puzzle game of Sudoku. The goal of Sudoku is to fill the 9x9 grid of spaces with numbers 1-9 
+                while following a set of rules. Within the rows and columns are 9 "sub-squares" made up of 3x3 spaces. Each row, 
+                column, and 3x3 sub-square must not allow any repeated numbers. If you would like to read up more on this, please 
+                refer to the manual. We hope you enjoy our game!</p>
+            </div>
+        </div>
+    </body>
+</HTML>

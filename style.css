@@ -27,15 +27,3 @@
     background-color: #ff8800;
     color: white;
 }
-
-/*shows how to center a div in its container*/
-canvas {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 50%;
-    height: 50%;
-    padding: 20px;
-    text-align: center;
-}
