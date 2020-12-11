@@ -81,7 +81,9 @@
         var totalSeconds = 0;
         var inter = setInterval(setTime, 1000);
         function setTime() {
-            ++totalSeconds;
+            if(!is_solved) {
+                ++totalSeconds;
+            }
             secondsLabel.innerHTML = pad(totalSeconds % 60);
             minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
         }
@@ -168,7 +170,6 @@
             redder();
             if(checkIfSolved(empty_grid)) {
                 is_solved = true;
-                reset();
             }
         }
         function redder() {
