@@ -1,8 +1,9 @@
 <HTML>
     <head>
         <link rel="stylesheet" href="https://fonts.google.com/specimen/Fira+Code?query=Fira+Code">
-        <link rel="stylesheet" href="style.css">
-        <script src="sudoku.js"></script>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+        <script src="{{ url_for('static',filename='scripts/sudoku.js') }}"></script>
+        {% block head %}{% endblock %}
     </head>
     <body>
         <div class="menubar" id="menuBar">
@@ -11,9 +12,7 @@
             <a href="#about">About</a>
             <a href="#contact">Contact</a>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/p5@1.1.9/lib/p5.js"></script>
-        <script src="sketch.js"></script>
-        <div id="sketch">
+        {% block body %}{% endblock %}
         </div>
     </body>
 </HTML>

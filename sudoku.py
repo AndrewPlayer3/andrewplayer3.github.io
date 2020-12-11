@@ -40,6 +40,7 @@ def solver(grid):
             if grid[y][x] == 0:
                 for n in range(1,10):
                     if possible(grid, y, x, n):
+                        print(y,", ", x)
                         grid[y][x] = n
                         solver(grid)
                         grid[y][x] = 0
@@ -103,8 +104,4 @@ def countNonZero(board):
                 nonzero += 1
     return nonzero
 
-board = generateBoard()
-board = pruneBoard(board)
-
-print(countNonZero(board))
-print(np.matrix(board))
+solver(grid)
