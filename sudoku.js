@@ -5,20 +5,18 @@
 
 function possible(board, row, col, n) {
     for(i = 0; i < 9; i++) {
-        if(board[col][i] == n) {
+        if(board[row][i] === n) {
+            return false;
+        }
+        if(board[i][col] === n) {
             return false;
         }
     }
-    for(i = 0; i < 9; i++) {
-        if(board[i][row] == n) {
-            return false;
-        }
-    }
-    y0 = (row/3)*3;
-    x0 = (col/3)*3;
+    y0 = (Math.floor(row/3))*3;
+    x0 = (Math.floor(col/3))*3;
     for(i = 0; i < 3; i++) {
         for(j = 0; j < 3; j++) {
-            if(board[col+y0][row+x0] == n) {
+            if(board[i+y0][j+x0] === n) {
                 return false;
             }
         }
@@ -26,43 +24,22 @@ function possible(board, row, col, n) {
     return true;
 } 
 
-function solve(board, row, col, solutions) {
-    if(row == 9) {
-        row = 0;
-        if(++cols == 9) return ++solutions;
-    }
-    if(board[row][col] != 0) {
-        return solve(board, row+1, col, solutions);
-    }
-    for(k = 1; k <= 9 && solutions < 2; ++k) {
-        if(possible(board, row, col, k)) {
-            board[row][col] = k;
-            solutions = solve(board, row+1, col, solutions)
-            board[row][col] = 0;
-        }
-    }
-}
-
 function solver(board) {
-    for(i = 0; i < 9; i++) {
-        for(j = 0; j < 9; j++) {
-            if(board[i][j] == 0) {
-                for(k = 1; k < 10; k++) {
-                    if(possible(board, i, j, k)) {
-                        board[i][j] = k;
-                        solver();
-                        board[i][j] = 0;
+    for(y = 0; y < 9; y++) {
+        for(x = 0; x < 9; x++) {
+            if(board[y][x] === 0) {
+                for(n = 1; n < 10; n++) {
+                    if(possible(board, y, x, n)) {
+                        board[y][x] = n;
+                        solver(board);
+                        board[y][x] = 0;
                     }
                 }
                 return true;
             }
         }
     }
-    print(board)
-}
-
-function hasUniqueSolution(arr) {
-
+    console.log(board);
 }
 
 function shuffle(array) {
@@ -123,16 +100,14 @@ function pruneBoard(arr) {
     return arr
 }
 
-//let board = generateCompleteBoard();
-
-let board = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0]
+grid = [
+    [5, 3, 0, 0, 7, 0, 0, 0, 0],
+    [6, 0, 0, 1, 9, 5, 0, 0, 0],
+    [0, 9, 8, 0, 0, 0, 0, 6, 0],
+    [8, 0, 0, 0, 6, 0, 0, 0, 3],
+    [4, 0, 0, 8, 0, 3, 0, 0, 1],
+    [7, 0, 0, 0, 2, 0, 0, 0, 6],
+    [0, 6, 0, 0, 0, 0, 2, 8, 0],
+    [0, 0, 0, 4, 1, 9, 0, 0, 5],
+    [0, 0, 0, 0, 8, 0, 0, 7, 9]
 ];
