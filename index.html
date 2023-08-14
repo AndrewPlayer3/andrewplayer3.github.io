@@ -55,7 +55,7 @@
         <h3>Time: 
             <label id="minutes">00</label>:<label id="seconds">00</label>
         </h3>
-        <button type="button" onclick="createSudokuTable()"" size="50px">New Game</button>
+        <button type="button" onclick="createSudokuTable()" size="50px">New Game</button>
         <button type="button" onclick="solve()"" size="50px">Solve</button>
         <br>
         <table width="60%" padding-top="10px" padding-bottom="10px">
@@ -79,7 +79,7 @@
         var minutesLabel = document.getElementById("minutes");
         var secondsLabel = document.getElementById("seconds");
         var totalSeconds = 0;
-        var inter = setInterval(setTime, 1000);
+
         function setTime() {
             if(!is_solved) {
                 ++totalSeconds;
@@ -96,6 +96,7 @@
             }
         }
         function reset() {
+            var inter = setInterval(setTime, 1000);
             empty_grid = [
                 [0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -138,6 +139,7 @@
                 }
                 htmlText += '</tr>';
             }
+            is_solved = true;
             $('#sudokuTable').html(htmlText);
         }
         function createSudokuTable() {
